@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Google OAuth Redirect 测试</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        line-height: 1.5;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f5f7fb;
+        color: #0f172a;
+      }
+
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 2.5rem 1.5rem 4rem;
+      }
+
+      .card {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+      }
+
+      h1,
+      h2 {
+        margin-top: 0;
+      }
+
+      code,
+      pre {
+        font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+        font-size: 0.85rem;
+      }
+
+      pre {
+        background: #0f172a;
+        color: #f8fafc;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+
+      .actions {
+        margin-top: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .button {
+        border: none;
+        border-radius: 999px;
+        background: #2563eb;
+        color: white;
+        padding: 0.65rem 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 12px 32px rgba(37, 99, 235, 0.25);
+      }
+
+      .button:disabled {
+        background: #94a3b8;
+        box-shadow: none;
+        cursor: not-allowed;
+      }
+
+      .status {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        background: rgba(37, 99, 235, 0.08);
+      }
+
+      .status p {
+        margin: 0.35rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="card">
+        <h1>Google OAuth Redirect 测试</h1>
+        <p>
+          当 Google 登录流程完成后，将用户重定向至
+          <code>/auth_testing/</code>。此页面会读取 URL 上的查询 / hash
+          参数，并显示给审核人员，以便确认授权码或 <code>state</code>
+          是否正确返回。
+        </p>
+
+        <div class="status" id="status">
+          <h2>当前回调数据</h2>
+          <p>加载中…</p>
+        </div>
+
+        <h2>如何使用</h2>
+        <ol>
+          <li>在 Google Cloud 控制台中将授权重定向 URI 设置为此页面地址。</li>
+          <li>完成 OAuth 授权后，返回到此页面。</li>
+          <li>在下方查看 URL 查询参数与 hash 片段，截图提交审核即可。</li>
+        </ol>
+
+        <h2>完整 URL</h2>
+        <pre id="fullUrl">(待捕获)</pre>
+
+        <h2>查询参数</h2>
+        <pre id="queryParams">(待捕获)</pre>
+
+        <h2>Hash 参数</h2>
+        <pre id="hashParams">(待捕获)</pre>
+
+        <h2>回传到 Flutter 应用</h2>
+        <p>
+          页面会根据自定义 Scheme
+          <code>com.example.testingauth</code>
+          构造一个深链，便于在 OAuth 登录完成后唤起 Flutter 应用并把参数带回客户端。
+        </p>
+        <pre id="deepLink">(待生成)</pre>
+        <div class="actions">
+          <button class="button" id="openAppButton" type="button" disabled>
+            尝试打开 Flutter 应用
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const statusEl = document.getElementById("status");
+      const fullUrlEl = document.getElementById("fullUrl");
+      const queryEl = document.getElementById("queryParams");
+      const hashEl = document.getElementById("hashParams");
+      const deepLinkEl = document.getElementById("deepLink");
+      const openAppButton = document.getElementById("openAppButton");
+
+      const DEEP_LINK_BASE = "com.example.testingauth://oauth-callback";
+      let lastDeepLink = "";
+      let hasAttemptedAutoLaunch = false;
+
+      function formatParams(params) {
+        if (!params || params.size === 0) return "(无数据)";
+        const result = [];
+        params.forEach((value, key) => {
+          result.push(`${key} = ${value}`);
+        });
+        return result.join("\n");
+      }
+
+      function parseHash(hash) {
+        if (!hash) return new URLSearchParams();
+        return new URLSearchParams(hash.replace(/^#/, ""));
+      }
+
+      function buildDeepLink(searchParams, hashParams) {
+        const combined = new URLSearchParams();
+        searchParams.forEach((value, key) => combined.set(key, value));
+        hashParams.forEach((value, key) => combined.set(key, value));
+        const serialized = combined.toString();
+        return serialized ? `${DEEP_LINK_BASE}?${serialized}` : DEEP_LINK_BASE;
+      }
+
+      function openFlutterApp() {
+        if (!lastDeepLink) return;
+        window.location.href = lastDeepLink;
+      }
+
+      function updateView() {
+        const url = window.location.href;
+        const searchParams = new URLSearchParams(window.location.search);
+        const hashParams = parseHash(window.location.hash);
+
+        fullUrlEl.textContent = url || "(无数据)";
+        queryEl.textContent = formatParams(searchParams);
+        hashEl.textContent = formatParams(hashParams);
+
+        const hasAuthCode = searchParams.has("code") || hashParams.has("code");
+        const state = searchParams.get("state") || hashParams.get("state");
+        const hasAnyParams =
+          searchParams.toString() !== "" || hashParams.toString() !== "";
+
+        if (hasAnyParams) {
+          lastDeepLink = buildDeepLink(searchParams, hashParams);
+          deepLinkEl.textContent = lastDeepLink;
+          openAppButton.disabled = false;
+        } else {
+          lastDeepLink = "";
+          deepLinkEl.textContent = "(暂无参数，等待 OAuth 回调)";
+          openAppButton.disabled = true;
+        }
+
+        statusEl.innerHTML = `
+          <h2>当前回调数据</h2>
+          <p><strong>是否包含 code：</strong> ${hasAuthCode ? "是" : "否"}</p>
+          <p><strong>state：</strong> ${state || "(无)"}</p>
+        `;
+
+        if (!hasAttemptedAutoLaunch && hasAuthCode && lastDeepLink) {
+          hasAttemptedAutoLaunch = true;
+          setTimeout(openFlutterApp, 600);
+        }
+      }
+
+      updateView();
+
+      openAppButton.addEventListener("click", openFlutterApp);
+    </script>
+  </body>
+</html>
