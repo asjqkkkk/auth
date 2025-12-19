@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>一日清单 · Google OAuth 功能验证</title>
+    <meta
+      name="description"
+      content="一日清单是一个仅用于演示和验证 Google OAuth 登录流程的轻量化待办清单应用。"
+    />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✅</text></svg>" />
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        line-height: 1.6;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f5f7fb;
+        color: #0f172a;
+      }
+
+      header {
+        background: white;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        padding: 1rem 2rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+
+      header h1 {
+        font-size: 1.25rem;
+        margin: 0;
+      }
+
+      header nav a {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      main {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 4rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .card {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+      }
+
+      .card h2 {
+        margin-top: 0;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .button {
+        background: #2563eb;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 600;
+        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+      }
+
+      .button.secondary {
+        background: rgba(37, 99, 235, 0.1);
+        color: #1e1b4b;
+        box-shadow: none;
+      }
+
+      footer {
+        text-align: center;
+        padding: 2rem 1rem 3rem;
+        color: #475569;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>一日清单 · One Day Todos</h1>
+      <nav>
+        <a href="./privacy.html">隐私权政策</a>
+        <span>·</span>
+        <a href="./terms.html">服务条款</a>
+      </nav>
+    </header>
+    <main>
+      <section class="card">
+        <h2>应用用途说明</h2>
+        <p>
+          一日清单（One Day Todos）是一个用于验证 Google OAuth 登录、授权和令牌刷新流程的演示型待办清单应用。
+          它仅在开发者账号范围内使用，不面向公众提供商业功能。
+        </p>
+        <p>
+          应用会请求
+          <strong>Google 身份验证</strong>和<strong>基础用户信息</strong>，用于演示如何在浏览器端识别用户并将待办数据保存到本地浏览器存储。
+          所有示例数据都存储在您的浏览器本地，且不会发送到任何服务器。
+        </p>
+        <div class="actions">
+          <a class="button" href="./todos/" rel="noopener">打开一日清单</a>
+          <a class="button secondary" href="./privacy.html">查看隐私权政策</a>
+          <a class="button secondary" href="./terms.html">查看服务条款</a>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>当前验证目录</h2>
+        <p>
+          本仓库会按功能拆分不同目录，分别对应不同的 Google 应用验证实验。<br />
+          <strong>todos/</strong>：一日清单的静态示例站点，包含 Google 登录流程与本地待办管理逻辑。
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>支持与反馈</h2>
+        <p>
+          如果您是审核人员，需要更多关于一日清单用途或数据处理的说明，请通过
+          <a href="https://github.com/asjqkkkk" target="_blank" rel="noopener"
+            >GitHub 主页</a
+          >
+          联系开发者。该应用不会收集或分享任何敏感数据。
+        </p>
+      </section>
+    </main>
+    <footer>
+      © 2024 一日清单 · 仅用于 Google OAuth 功能验证 ·
+      <a href="./privacy.html">隐私权政策</a> ·
+      <a href="./terms.html">服务条款</a>
+    </footer>
+  </body>
+</html>

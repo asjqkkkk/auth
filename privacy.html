@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>一日清单 · 隐私权政策</title>
+    <meta
+      name="description"
+      content="了解一日清单（One Day Todos）演示应用如何使用 Google OAuth 数据。"
+    />
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f5f7fb;
+        color: #0f172a;
+      }
+
+      header,
+      main {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+      }
+
+      header h1 {
+        margin-bottom: 0.25rem;
+      }
+
+      a {
+        color: #2563eb;
+      }
+
+      .card {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>一日清单 · 隐私权政策</h1>
+      <p>最后更新：2024-05-01</p>
+    </header>
+    <main>
+      <article class="card">
+        <h2>应用用途</h2>
+        <p>
+          一日清单（One Day Todos）是开发者 asjqkkkk 用于演示和验证 Google OAuth
+          登录流程的测试项目。该站点不对公众提供商业服务，仅用于展示如何在浏览器端集成
+          Google 身份服务。
+        </p>
+
+        <h2>收集与使用的数据</h2>
+        <ul>
+          <li>
+            当您点击「使用 Google 登录」按钮时，Google 会返回 ID Token。页面仅在浏览器内解码该令牌，从中读取
+            <strong>用户 ID、姓名、头像、邮箱</strong>，用于展示登录状态。
+          </li>
+          <li>
+            所有待办事项数据保存在您浏览器的 <code>localStorage</code> 中，且仅与您的 Google
+            用户 ID 相关联，不会上传到任何服务器。
+          </li>
+        </ul>
+
+        <h2>数据分享</h2>
+        <p>
+          一日清单不会将您的任何信息发送给第三方服务或开发者服务器。Google
+          登录数据仅用于当前页面的演示逻辑。
+        </p>
+
+        <h2>数据保存</h2>
+        <p>
+          所有数据都保存在本地浏览器中。您可以在浏览器设置中清除站点数据或点击应用内的「退出登录」按钮删除本地缓存。
+        </p>
+
+        <h2>联系我们</h2>
+        <p>
+          如需更多说明，请在
+          <a href="https://github.com/asjqkkkk" target="_blank" rel="noopener"
+            >GitHub</a
+          >
+          上联系 asjqkkkk。
+        </p>
+
+        <p>
+          返回<a href="./index.html">一日清单主页</a>
+        </p>
+      </article>
+    </main>
+  </body>
+</html>
